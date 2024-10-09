@@ -17,11 +17,11 @@ public class SucursalService {
     @Autowired
     ProductoService productoService;
 
-    public boolean sucursalExists(String idSucursal){
-        return sucursalRepository.existsById(Long.valueOf(idSucursal));
+    public boolean sucursalNotPresent(String idSucursal){
+        return !sucursalRepository.existsById(Long.valueOf(idSucursal));
     }
 
-    public Sucursal addSucursal(Sucursal sucursal){
+    public Sucursal addOrUpdateSucursal(Sucursal sucursal){
         return sucursalRepository.save(sucursal);
     }
 
@@ -29,6 +29,12 @@ public class SucursalService {
         Sucursal sucursal = sucursalRepository.findById(Long.valueOf(idSucursal)).get();
         producto.setSucursal(sucursal);
         return productoService.addOrUpdateProducto(producto);
+    }
+
+    public Sucursal updateSucursalName(String idSucursal, String sucursalName){
+        Sucursal sucursal = sucursalRepository.findById(Long.valueOf(idSucursal)).get();
+        sucursal.setName(sucursalName);
+        return addOrUpdateSucursal(sucursal);
     }
 
     public void deleteProducto(Producto producto) {

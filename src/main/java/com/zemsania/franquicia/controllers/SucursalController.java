@@ -1,6 +1,8 @@
 package com.zemsania.franquicia.controllers;
 
+import com.zemsania.franquicia.entities.Franquicia;
 import com.zemsania.franquicia.entities.Producto;
+import com.zemsania.franquicia.entities.Sucursal;
 import com.zemsania.franquicia.services.SucursalService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -19,17 +21,26 @@ public class SucursalController {
     @Operation(summary = "Add a product in the database linked to an existing sucursal")
     @PostMapping("{id}")
     public ResponseEntity<Producto> addProducto(@PathVariable("id") @Parameter(name = "id", description = "sucursal's id") String idSucursal, @RequestBody Producto producto){
-        if(!sucursalService.sucursalExists(idSucursal)){
+        if(sucursalService.sucursalNotPresent(idSucursal)){
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(sucursalService.addProducto(idSucursal, producto));
+    }
+
+    @Operation(summary = "Update a sucursal name")
+    @PostMapping("/{id}/name")
+    public ResponseEntity<Sucursal> updateSucursalName(@PathVariable("id") @Parameter(name = "id", description = "sucursal's id") String idSucursal, @RequestBody String sucursalName){
+        if(sucursalService.sucursalNotPresent(idSucursal)){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(sucursalService.updateSucursalName(idSucursal, sucursalName));
     }
 
     //Using the idSucursal is useless in that case, should we remove the method in ProductoController ?
     @Operation(summary = "Delete an exisiting product linked to a sucursal")
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteProducto(@PathVariable("id") @Parameter(name = "id", description = "sucursal's id") String idSucursal, @RequestBody Producto producto){
-        if(!sucursalService.sucursalExists(idSucursal)){
+        if(sucursalService.sucursalNotPresent(idSucursal)){
             return ResponseEntity.notFound().build();
         }
         sucursalService.deleteProducto(producto);

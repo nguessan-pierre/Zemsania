@@ -4,6 +4,7 @@ import com.zemsania.franquicia.entities.Producto;
 import com.zemsania.franquicia.entities.Sucursal;
 import com.zemsania.franquicia.repositories.ProductoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +16,10 @@ public class ProductoService {
 
     public List<Producto> findProductoList(){
         return productoRepository.findAll();
+    }
+
+    public Producto findProductoById(String idProducto){
+        return productoRepository.findById(Long.valueOf(idProducto)).get();
     }
 
     public boolean productoNotPresent(String idProducto){

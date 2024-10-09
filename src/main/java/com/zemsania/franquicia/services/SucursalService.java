@@ -7,6 +7,7 @@ import com.zemsania.franquicia.repositories.SucursalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,6 +22,10 @@ public class SucursalService {
         return !sucursalRepository.existsById(Long.valueOf(idSucursal));
     }
 
+    public List<Producto> findProductoListBySucursalId(String idSucursal){
+        Sucursal sucursal = sucursalRepository.findById(Long.valueOf(idSucursal)).get();
+        return sucursal.getProductList();
+    }
     public Sucursal addOrUpdateSucursal(Sucursal sucursal){
         return sucursalRepository.save(sucursal);
     }
@@ -35,6 +40,14 @@ public class SucursalService {
         Sucursal sucursal = sucursalRepository.findById(Long.valueOf(idSucursal)).get();
         sucursal.setName(sucursalName);
         return addOrUpdateSucursal(sucursal);
+    }
+
+    public boolean productoNotPresent(String idProducto){
+        return productoService.productoNotPresent(idProducto);
+    }
+    public boolean sucursalNotLinkedToProducto(String idSucursal, String idProducto){
+        Producto producto = productoService.findProductoById(idProducto);
+        return !producto.getSucursal().getId().equals(Long.valueOf(idSucursal));
     }
 
     public void deleteProducto(Producto producto) {

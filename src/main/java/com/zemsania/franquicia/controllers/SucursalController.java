@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/v1/sucursals")
 public class SucursalController {
@@ -27,6 +29,15 @@ public class SucursalController {
         return ResponseEntity.ok(sucursalService.addProducto(idSucursal, producto));
     }
 
+    @Operation(summary = "Get a list of every product stored in a sucursal")
+    @GetMapping("{id}/stocks")
+    public ResponseEntity<List<Producto>> findProductoListBySucursalId(@PathVariable("id") @Parameter(name = "id", description = "sucursal's id") String idSucursal){
+        if(sucursalService.sucursalNotPresent(idSucursal)){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(sucursalService.findProductoListBySucursalId(idSucursal));
+    }
+
     @Operation(summary = "Update a sucursal name")
     @PostMapping("/{id}/name")
     public ResponseEntity<Sucursal> updateSucursalName(@PathVariable("id") @Parameter(name = "id", description = "sucursal's id") String idSucursal, @RequestBody String sucursalName){
@@ -39,11 +50,14 @@ public class SucursalController {
     @Operation(summary = "Delete an exisiting product linked to a sucursal")
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteProducto(@PathVariable("id") @Parameter(name = "id", description = "sucursal's id") String idSucursal, @RequestBody Producto producto){
-        if(!idSucursal.equals(producto.getSucursal().getId().toString())){
-            return ResponseEntity.badRequest().build();
-        }
         if(sucursalService.sucursalNotPresent(idSucursal)){
             return ResponseEntity.notFound().build();
+        }
+        if(sucursalService.productoNotPresent(String.valueOf(producto.getId()))){
+            return ResponseEntity.notFound().build();
+        }
+        if(sucursalService.sucursalNotLinkedToProducto(idSucursal, producto.getId().toString())){
+            return ResponseEntity.badRequest().build();
         }
         sucursalService.deleteProducto(producto);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

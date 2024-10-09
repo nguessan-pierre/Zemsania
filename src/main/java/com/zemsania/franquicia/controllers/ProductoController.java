@@ -37,4 +37,13 @@ public class ProductoController {
         }
         return ResponseEntity.ok(productoService.updateProductoName(idProducto, productoName));
     }
+
+    @Operation(summary = "Update a producto stock")
+    @PostMapping("/{id}/stock")
+    public ResponseEntity<Producto> updateProductoStock(@PathVariable("id") @Parameter(name = "id", description = "producto's id") String idProducto, @RequestBody int productoStock){
+        if(productoService.productoNotPresent(idProducto)){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(productoService.updateProductoStock(idProducto, productoStock));
+    }
 }

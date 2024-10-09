@@ -34,4 +34,10 @@ public class ProductoService {
         producto.setName(productoName);
         return addOrUpdateProducto(producto);
     }
+
+    public Producto updateProductoStock(String idProducto, int productoStock) {
+        Producto producto = productoRepository.findById(Long.valueOf(idProducto)).get();
+        producto.setStock(productoStock);
+        return addOrUpdateProducto(producto);
+    }
 }

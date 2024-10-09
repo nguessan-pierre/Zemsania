@@ -36,10 +36,12 @@ public class SucursalController {
         return ResponseEntity.ok(sucursalService.updateSucursalName(idSucursal, sucursalName));
     }
 
-    //Using the idSucursal is useless in that case, should we remove the method in ProductoController ?
     @Operation(summary = "Delete an exisiting product linked to a sucursal")
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteProducto(@PathVariable("id") @Parameter(name = "id", description = "sucursal's id") String idSucursal, @RequestBody Producto producto){
+        if(!idSucursal.equals(producto.getSucursal().getId().toString())){
+            return ResponseEntity.badRequest().build();
+        }
         if(sucursalService.sucursalNotPresent(idSucursal)){
             return ResponseEntity.notFound().build();
         }

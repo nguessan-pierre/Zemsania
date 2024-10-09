@@ -12,12 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 
-/*
-actualizar el nombre de una franquicia
-acutalizar el nombre de une sucursal
-actualizar el nombre de un producto
- */
-
 @RestController
 @RequestMapping("/v1/franquicias")
 public class FranquiciaController {

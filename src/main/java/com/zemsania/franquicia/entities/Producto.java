@@ -1,5 +1,7 @@
 package com.zemsania.franquicia.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +18,8 @@ public class Producto {
     private String name;
     private int stock;
 
-    @ManyToOne
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="sucursal_id", nullable=false)
     private Sucursal sucursal;
 }

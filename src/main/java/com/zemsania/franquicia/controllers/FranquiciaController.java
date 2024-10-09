@@ -4,6 +4,7 @@ import com.zemsania.franquicia.entities.Franquicia;
 import com.zemsania.franquicia.entities.Sucursal;
 import com.zemsania.franquicia.services.FranquiciaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,8 +17,10 @@ public class FranquiciaController {
     FranquiciaService franquiciaService;
 
     @GetMapping
-    public List<Franquicia> findFranquiciaList(){
-        return franquiciaService.findFranquiciaList();
+    @ResponseBody
+    public ResponseEntity<List<Franquicia>> findFranquiciaList(){
+        var val = franquiciaService.findFranquiciaList();
+        return ResponseEntity.ok(val);
     }
 
     @PostMapping

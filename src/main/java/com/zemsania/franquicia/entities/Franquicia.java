@@ -1,9 +1,7 @@
 package com.zemsania.franquicia.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,7 +18,8 @@ public class Franquicia {
     private Long id;
     private String name;
 
-    @OneToMany(mappedBy="franquicia")
+    @JsonManagedReference
+    @OneToMany(fetch = FetchType.LAZY,mappedBy="franquicia")
     private List<Sucursal> sucursalList;
 
 }

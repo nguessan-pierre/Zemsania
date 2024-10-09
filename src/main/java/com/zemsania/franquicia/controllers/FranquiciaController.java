@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -19,22 +20,35 @@ public class FranquiciaController {
     @GetMapping
     @ResponseBody
     public ResponseEntity<List<Franquicia>> findFranquiciaList(){
-        var val = franquiciaService.findFranquiciaList();
-        return ResponseEntity.ok(val);
+        return ResponseEntity.ok(franquiciaService.findFranquiciaList());
     }
 
     @PostMapping
-    public Franquicia addFranquicia(@RequestBody Franquicia franquicia){
-        return franquiciaService.addFranquicia(franquicia);
+    public ResponseEntity<Franquicia> addFranquicia(@RequestBody Franquicia franquicia){
+        return ResponseEntity.ok(franquiciaService.addFranquicia(franquicia));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<List<Sucursal>> findSucursalListByFranquiciaId(@PathVariable("id") String idFranquicia){
+        if(!franquiciaService.franquiciaExists(idFranquicia)){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(franquiciaService.findSucursalListByFranquiciaId(idFranquicia));
     }
 
     @PostMapping("/{id}")
-    public Sucursal addSucursalToFranquicia(@PathVariable("id") String idFranquicia, @RequestBody Sucursal sucursal){
-        return franquiciaService.addSucursal(idFranquicia, sucursal);
+    public ResponseEntity<Sucursal> addSucursalToFranquicia(@PathVariable("id") String idFranquicia, @RequestBody Sucursal sucursal){
+        if(!franquiciaService.franquiciaExists(idFranquicia)){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(franquiciaService.addSucursal(idFranquicia, sucursal));
     }
 
-    @GetMapping("/stocks")
-    public void findMaxStocksPerSucursal(){
-
+    @GetMapping("/{id}/stocks")
+    public ResponseEntity<HashMap> findMaxStocksPerSucursal(@PathVariable("id") String idFranquicia){
+        if(!franquiciaService.franquiciaExists(idFranquicia)){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(franquiciaService.findMaxStockInSucursal(idFranquicia));
     }
 }

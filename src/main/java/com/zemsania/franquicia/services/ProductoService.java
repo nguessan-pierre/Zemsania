@@ -5,10 +5,16 @@ import com.zemsania.franquicia.repositories.ProductoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ProductoService {
     @Autowired
     ProductoRepository productoRepository;
+
+    public List<Producto> findProductoList(){
+        return productoRepository.findAll();
+    }
 
     public Producto addOrUpdateProducto(Producto producto) {
         return productoRepository.save(producto);

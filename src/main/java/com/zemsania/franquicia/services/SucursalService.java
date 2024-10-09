@@ -17,21 +17,21 @@ public class SucursalService {
     @Autowired
     ProductoService productoService;
 
+    public boolean sucursalExists(String idSucursal){
+        return sucursalRepository.existsById(Long.valueOf(idSucursal));
+    }
 
     public Sucursal addSucursal(Sucursal sucursal){
         return sucursalRepository.save(sucursal);
     }
 
     public Producto addProducto(String idSucursal, Producto producto){
-        Optional<Sucursal> sucursalOptional = sucursalRepository.findById(Long.valueOf(idSucursal));
-        if (sucursalOptional.isEmpty()){
-            throw new NullPointerException("sucursal doesn't exist");
-        }
-        producto.setSucursal(sucursalOptional.get());
+        Sucursal sucursal = sucursalRepository.findById(Long.valueOf(idSucursal)).get();
+        producto.setSucursal(sucursal);
         return productoService.addOrUpdateProducto(producto);
     }
 
-    public void deleteProducto(String idSucursal, Producto producto) {
+    public void deleteProducto(Producto producto) {
         productoService.deleteProducto(producto);
     }
 }

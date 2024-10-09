@@ -17,7 +17,7 @@ public class ProductoController {
     @Autowired
     ProductoService productoService;
 
-    @Operation(summary = "Return a list of all products linked to a sucursal")
+    @Operation(summary = "Return a list of all products registereds")
     @GetMapping
     public ResponseEntity<List<Producto>> findProductList(){
         return ResponseEntity.ok(productoService.findProductoList());
